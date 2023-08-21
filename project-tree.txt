@@ -1,0 +1,51 @@
+Folder PATH listing for volume Data
+Volume serial number is B2E5-07B8
+D:.
+
++---components
+|   +---global
+|   |       NavBar.js
+|   |       
+|   +---shared
+|   +---utils
+|           SimpleDropdown.js
+|           
++---configurations
++---models
++---oemData
++---pages
+|   |   index.js
+|   |   _app.js
+|   |   _document.js
+|   |   
+|   +---api
+|           hello.js
+|           
++---public
+|       favicon.ico
+|       next.svg
+|       vercel.svg
+|       
++---styles
+|   |   globals.css
+|   |   Home.module.css
+|   |   
+|   +---base
+|   +---components
+|       +---global
+|       +---shared
+|       +---utils
+|               SimpleDropdown.module.css
+|               
+\---utils
+        db.js
+        
+|   .env.local
+|   .eslintrc.json
+|   .gitignore
+|   jsconfig.json
+|   next.config.js
+|   package-lock.json
+|   package.json
+|   project-tree.txt
+|   README.md
