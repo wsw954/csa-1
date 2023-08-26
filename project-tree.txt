@@ -1,17 +1,17 @@
 Folder PATH listing for volume Data
 Volume serial number is B2E5-07B8
-D:.
-
+             
 +---components
 |   +---global
 |   |       NavBar.js
 |   |       
 |   +---shared
-|   +---utils
+|   \---utils
 |           SimpleDropdown.js
 |           
 +---configurations
 +---models
+|       user.js              
 +---oemData
 +---pages
 |   |   index.js
@@ -19,7 +19,14 @@ D:.
 |   |   _document.js
 |   |   
 |   +---api
-|           hello.js
+|   |   |   buyers.js
+|   |   |   users.js
+|   |   |   
+|   |   \---buyers
+|   |           [id].js
+|   |           
+|   \---buyers
+|           new.js
 |           
 +---public
 |       favicon.ico
@@ -31,15 +38,14 @@ D:.
 |   |   Home.module.css
 |   |   
 |   +---base
-|   +---components
+|   \---components
 |       +---global
 |       +---shared
-|       +---utils
+|       \---utils
 |               SimpleDropdown.module.css
 |               
 \---utils
         db.js
-        
 |   .env.local
 |   .eslintrc.json
 |   .gitignore
@@ -49,3 +55,4 @@ D:.
 |   package.json
 |   project-tree.txt
 |   README.md
+        

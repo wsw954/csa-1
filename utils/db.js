@@ -1,40 +1,26 @@
-// utils/db.js
 import mongoose from "mongoose";
-// import dotenv from "dotenv";
 
-// dotenv.config();
+const connection = {};
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-// if (!MONGODB_URI) {
-//   throw new Error(
-//     "Please define the MONGODB_URI environment variable inside .env.local"
-//   );
-// }
-console.log("MongoDB URI:", process.env.MONGODB_URI);
-console.log("Test Variable:", process.env.TEST_VAR);
-
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-async function connectDB() {
-  if (cached.conn) {
-    return cached.conn;
+async function dbConnect() {
+  // Check if we're already connected to the database
+  if (connection.isConnected) {
+    console.log("Already connected to the database.");
+    return;
   }
 
-  if (!cached.promise) {
-    const conn = await mongoose.connect(MONGODB_URI, {
+  try {
+    // Connect to the database
+    const db = await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    cached.conn = conn;
-    cached.promise = conn;
-  }
 
-  return cached.promise;
+    connection.isConnected = db.connections[0].readyState;
+    console.log("Successfully connected to the database.");
+  } catch (error) {
+    console.error("Failed to connect to the database:", error.message);
+  }
 }
 
-export default connectDB;
+export default dbConnect;

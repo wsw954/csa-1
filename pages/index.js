@@ -28,7 +28,7 @@ export default function Home() {
           Your go-to platform for connecting vehicle buyers and dealers. Build,
           request, offer - all in one place.
         </p>
-        <p className={styles.description}>{dbStatus}</p>
+        <p className={styles.description}></p>
       </main>
     </div>
   );

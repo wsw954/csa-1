@@ -9,9 +9,9 @@ const SignupSchema = Yup.object().shape({
     .max(50, "Too Long!")
     .required("Required")
     .test("is-username-unique", "Username already exists", async (value) => {
-      const response = await axios.post("/api/check-username", {
-        username: value,
-      });
+      const response = await axios.get(
+        `/api/users?action=check-username&username=${value}`
+      );
       return !response.data.exists;
     }),
   firstName: Yup.string()
@@ -50,9 +50,12 @@ const SignupSchema = Yup.object().shape({
     .required("Required"),
   creditScore: Yup.number()
     .nullable()
-    .transform((value, originalValue) =>
-      originalValue.trim() === "" ? null : value
-    )
+    .transform((value, originalValue) => {
+      if (typeof originalValue === "string" && originalValue.trim() === "") {
+        return null;
+      }
+      return value;
+    })
     .min(300, "Credit score should be at least 300.")
     .max(850, "Credit score should be at most 850.")
     .notRequired()
@@ -77,8 +80,20 @@ export default function BuyersNew() {
     },
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      // Handle form submission here
-      console.log(values);
+      try {
+        const response = await axios.post("/api/buyers", values);
+        if (response.status === 201) {
+          console.log("Buyer created successfully:", response.data);
+          // Optionally, you can redirect the user or show a success message
+          // For example: router.push('/path-to-success-page');
+        } else {
+          console.error("Error creating buyer:", response.data.error);
+          // Handle the error, maybe show an error message to the user
+        }
+      } catch (error) {
+        console.error("Error creating buyer:", error);
+        // Handle the error, maybe show an error message to the user
+      }
     },
   });
 
