@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+// const mongoose = require("mongoose");
 const connection = {};
 
 async function dbConnect() {
@@ -11,11 +11,7 @@ async function dbConnect() {
 
   try {
     // Connect to the database
-    const db = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
+    const db = await mongoose.connect(process.env.MONGODB_URI);
     connection.isConnected = db.connections[0].readyState;
     console.log("Successfully connected to the database.");
   } catch (error) {

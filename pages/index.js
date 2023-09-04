@@ -1,21 +1,18 @@
 import NavBar from "/components/global/NavBar";
-import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-import { useState, useEffect } from "react"; //Test DB Code
-import connectDB from "../utils/db"; //Test DB code
+import app from "/utils/firebase";
 
 export default function Home() {
-  const [dbStatus, setDbStatus] = useState("");
-  useEffect(() => {
-    (async () => {
-      try {
-        await connectDB();
-        setDbStatus("Connected to MongoDB Atlas");
-      } catch (error) {
-        setDbStatus("Error connecting to MongoDB Atlas: " + error.message);
-      }
-    })();
-  }, []);
+  const handleSignUp = async () => {
+    try {
+      const userCredential = await app
+        .auth()
+        .createUserWithEmailAndPassword("test@example.com", "testPassword123");
+      console.log("User signed up:", userCredential.user);
+    } catch (error) {
+      console.error("Error signing up:", error);
+    }
+  };
 
   return (
     <div>
@@ -29,6 +26,9 @@ export default function Home() {
           request, offer - all in one place.
         </p>
         <p className={styles.description}></p>
+        <div>
+          <button onClick={handleSignUp}>Test Sign Up</button>
+        </div>
       </main>
     </div>
   );

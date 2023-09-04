@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 // Define the Yup validation schema
 const SignupSchema = Yup.object().shape({
@@ -84,8 +85,8 @@ export default function BuyersNew() {
         const response = await axios.post("/api/buyers", values);
         if (response.status === 201) {
           console.log("Buyer created successfully:", response.data);
-          // Optionally, you can redirect the user or show a success message
-          // For example: router.push('/path-to-success-page');
+          const router = useRouter(); // <-- Use the useRouter hook
+          router.push("/buyers/dashboard"); // <-- Redirect to dashboard
         } else {
           console.error("Error creating buyer:", response.data.error);
           // Handle the error, maybe show an error message to the user

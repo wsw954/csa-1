@@ -20,6 +20,7 @@ Volume serial number is B2E5-07B8
 |   |   
 |   +---api
 |   |   |   buyers.js
+|   |   |   testConnection.js 
 |   |   |   users.js
 |   |   |   
 |   |   \---buyers
@@ -27,6 +28,7 @@ Volume serial number is B2E5-07B8
 |   |           
 |   \---buyers
 |           new.js
+|           dashboard.js
 |           
 +---public
 |       favicon.ico
@@ -46,6 +48,7 @@ Volume serial number is B2E5-07B8
 |               
 \---utils
         db.js
+        firebase.js
 |   .env.local
 |   .eslintrc.json
 |   .gitignore
