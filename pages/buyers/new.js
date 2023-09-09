@@ -2,19 +2,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { signUp } from "/utils/auth";
+import debounce from "lodash/debounce";
 
 // Define the Yup validation schema
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
-    .required("Required")
-    .test("is-username-unique", "Username already exists", async (value) => {
-      const response = await axios.get(
-        `/api/users?action=check-username&username=${value}`
-      );
-      return !response.data.exists;
-    }),
+    .required("Required"),
   firstName: Yup.string()
     .min(2, "Too Short!")
     .max(70, "Too Long!")
@@ -64,6 +60,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 export default function BuyersNew() {
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -80,23 +77,46 @@ export default function BuyersNew() {
       creditScore: "",
     },
     validationSchema: SignupSchema,
+
     onSubmit: async (values) => {
+      // If there are no errors, continue with the form submission (e.g., create the user)
       try {
         const response = await axios.post("/api/buyers", values);
         if (response.status === 201) {
           console.log("Buyer created successfully:", response.data);
-          const router = useRouter(); // <-- Use the useRouter hook
-          router.push("/buyers/dashboard"); // <-- Redirect to dashboard
+          router.push("/buyers/dashboard");
         } else {
           console.error("Error creating buyer:", response.data.error);
-          // Handle the error, maybe show an error message to the user
         }
       } catch (error) {
         console.error("Error creating buyer:", error);
-        // Handle the error, maybe show an error message to the user
       }
     },
   });
+
+  const handleUsernameBlur = async (e) => {
+    formik.handleBlur(e);
+    if (formik.values.username) {
+      const response = await axios.get(
+        `/api/users?action=check-username&username=${formik.values.username}`
+      );
+      if (response.data.exists) {
+        formik.setFieldError("username", "Username already exists");
+      }
+    }
+  };
+
+  const handleEmailBlur = async (e) => {
+    formik.handleBlur(e);
+    if (formik.values.email) {
+      const response = await axios.get(
+        `/api/users?action=check-email&email=${formik.values.email}`
+      );
+      if (response.data.exists) {
+        formik.setFieldError("email", "Email already exists");
+      }
+    }
+  };
 
   return (
     <div>
@@ -108,7 +128,7 @@ export default function BuyersNew() {
             type="text"
             name="username"
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            onBlur={handleUsernameBlur}
             value={formik.values.username}
           />
           {formik.errors.username && formik.touched.username ? (
@@ -225,7 +245,7 @@ export default function BuyersNew() {
             type="email"
             name="email"
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            onBlur={handleEmailBlur}
             value={formik.values.email}
           />
           {formik.errors.email && formik.touched.email ? (

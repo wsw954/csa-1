@@ -1,6 +1,6 @@
 Folder PATH listing for volume Data
 Volume serial number is B2E5-07B8
-             
+D:.        
 +---components
 |   +---global
 |   |       NavBar.js
@@ -10,8 +10,12 @@ Volume serial number is B2E5-07B8
 |           SimpleDropdown.js
 |           
 +---configurations
++---contexts
+|       AuthContext.js
+|       
 +---models
-|       user.js              
+|       user.js
+| 
 +---oemData
 +---pages
 |   |   index.js
@@ -20,15 +24,16 @@ Volume serial number is B2E5-07B8
 |   |   
 |   +---api
 |   |   |   buyers.js
-|   |   |   testConnection.js 
+|   |   |   hello.js
 |   |   |   users.js
 |   |   |   
 |   |   \---buyers
 |   |           [id].js
 |   |           
 |   \---buyers
-|           new.js
 |           dashboard.js
+|           login.js
+|           new.js
 |           
 +---public
 |       favicon.ico
@@ -44,11 +49,12 @@ Volume serial number is B2E5-07B8
 |       +---global
 |       +---shared
 |       \---utils
-|               SimpleDropdown.module.css
-|               
+|               SimpleDropdown.module.css            
 \---utils
+        auth.js
         db.js
         firebase.js
+        firebaseAdmin.js               
 |   .env.local
 |   .eslintrc.json
 |   .gitignore
@@ -58,4 +64,5 @@ Volume serial number is B2E5-07B8
 |   package.json
 |   project-tree.txt
 |   README.md
-        
+|   
+          

@@ -1,19 +1,7 @@
 import NavBar from "/components/global/NavBar";
 import styles from "@/styles/Home.module.css";
-import app from "/utils/firebase";
 
 export default function Home() {
-  const handleSignUp = async () => {
-    try {
-      const userCredential = await app
-        .auth()
-        .createUserWithEmailAndPassword("test@example.com", "testPassword123");
-      console.log("User signed up:", userCredential.user);
-    } catch (error) {
-      console.error("Error signing up:", error);
-    }
-  };
-
   return (
     <div>
       <div>
@@ -26,9 +14,7 @@ export default function Home() {
           request, offer - all in one place.
         </p>
         <p className={styles.description}></p>
-        <div>
-          <button onClick={handleSignUp}>Test Sign Up</button>
-        </div>
+        <div></div>
       </main>
     </div>
   );

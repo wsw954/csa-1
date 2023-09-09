@@ -64,12 +64,6 @@ const userSchema = new Schema(
       unique: true,
       match: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
     },
-    password: {
-      type: String,
-      required: true,
-      minlength: 8,
-      match: /[a-zA-Z]/,
-    },
   },
   userOptions
 );
@@ -82,6 +76,10 @@ const buyerSchema = new Schema({
     type: Number,
     min: 300,
     max: 850,
+    validate: {
+      validator: Number.isInteger,
+      message: "{VALUE} is not an integer value",
+    },
   },
 });
 
