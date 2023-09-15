@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { signUp } from "/utils/auth";
-import debounce from "lodash/debounce";
 
 // Define the Yup validation schema
 const SignupSchema = Yup.object().shape({
@@ -79,17 +78,26 @@ export default function BuyersNew() {
     validationSchema: SignupSchema,
 
     onSubmit: async (values) => {
-      // If there are no errors, continue with the form submission (e.g., create the user)
       try {
+        // Save user to MongoDB
         const response = await axios.post("/api/buyers", values);
-        if (response.status === 201) {
-          console.log("Buyer created successfully:", response.data);
-          router.push("/buyers/dashboard");
-        } else {
-          console.error("Error creating buyer:", response.data.error);
+        if (response.status !== 201) {
+          throw new Error(`MongoDB: ${response.data.error}`);
         }
+        console.log("Buyer created successfully:", response.data);
+
+        // Save user to Firebase
+        const firebaseUser = await signUp(values.email, values.password);
+        console.log("User created in Firebase:", firebaseUser);
+
+        // Redirect to dashboard
+        router.push("/buyers/dashboard");
       } catch (error) {
-        console.error("Error creating buyer:", error);
+        if (error.message.includes("MongoDB")) {
+          console.error("Error creating buyer in MongoDB:", error.message);
+        } else {
+          console.error("Error creating user in Firebase:", error.message);
+        }
       }
     },
   });

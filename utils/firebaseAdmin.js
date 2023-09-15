@@ -1,26 +1,19 @@
-import admin from "firebase-admin";
+import { initializeApp, cert } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 
-// Check if Firebase admin is already initialized
-if (!admin.apps.length) {
-  try {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      // ... any other options you need
-    });
-  } catch (error) {
-    console.error("Failed to initialize Firebase admin:", error);
-  }
-}
+const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+const projectId = process.env.FIREBASE_PROJECT_ID;
 
-export const verifyIdToken = async (token) => {
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    return decodedToken;
-  } catch (error) {
-    console.error("Error verifying ID token:", error);
-    return null;
-  }
+const firebaseAdminConfig = {
+  credential: cert({
+    clientEmail,
+    privateKey,
+    projectId,
+  }),
 };
 
-export default admin;
+const adminApp = initializeApp(firebaseAdminConfig);
+const adminAuth = getAuth(adminApp);
+
+export { adminAuth };
