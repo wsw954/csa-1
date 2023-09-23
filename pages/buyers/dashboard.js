@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import NavBar from "/components/global/NavBar";
+import Link from "next/link";
 import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
 import { useAuth } from "/contexts/AuthContext";
+import { signOut } from "/utils/auth";
 import axios from "axios";
 
 export default function Dashboard() {
@@ -38,6 +40,15 @@ export default function Dashboard() {
     fetchUserInfo();
   }, [currentUser]);
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      router.push("/"); // Redirect to the home page or login page after sign-out
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   if (!currentUser) {
     // Redirect to login page or show a message
     return <div>Please login to access this page.</div>;
@@ -57,6 +68,24 @@ export default function Dashboard() {
           )}
           {error && <p className={styles.error}>Error: {error}</p>}
           <p className={styles.description}></p>
+          <br></br>
+          <div>
+            <Link href="/requests">Check On Your Request</Link>
+          </div>
+          <br></br>
+          <div>
+            <Link href="/vehicles">Click Here to See Your Saved Vehicles</Link>
+          </div>
+          <br></br>
+          <div>
+            <Link href="/vehicles/new">Create a New Vehicle</Link>
+          </div>
+          <br></br>
+          <div>
+            <Link href={`/buyers/${currentUser.uid}`}>Account Settings</Link>
+          </div>
+          <br></br>
+          <button onClick={handleSignOut}>Sign Out</button>
         </main>
       </div>
     );
