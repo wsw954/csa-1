@@ -1,77 +1,52 @@
 import dbConnect from "/utils/db";
 import { User } from "/models/user";
-import { adminAuth } from "/utils/firebaseAdmin";
+import rateLimit from "express-rate-limit";
+
+// Define rate limit middleware
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  keyGenerator: function (req) {
+    // Use the X-Forwarded-For header to get the IP address
+    return req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  },
+});
 
 export default async function handler(req, res) {
   await dbConnect();
+  // Apply rate limiting
+  await new Promise((resolve, reject) => {
+    limiter(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      resolve(result);
+    });
+  });
+
+  // Extract query parameters
+  const { action, username, email } = req.query;
 
   if (req.method === "GET") {
-    const { action, username, email } = req.query;
-    // Extract the token from the Authorization header
-    const token = req.headers.authorization?.split("Bearer ")[1];
-
-    if (!token) {
-      // If the token is not provided, return an unauthorized error
-      return res.status(401).json({ error: "Unauthorized" });
+    if (action === "check-username" && username) {
+      const userByUsername = await User.findOne({ username });
+      if (userByUsername) {
+        return res.status(409).json({ error: "Username already exists" });
+      }
+    } else if (action === "check-email" && email) {
+      const userByEmail = await User.findOne({ email });
+      if (userByEmail) {
+        return res.status(409).json({ error: "Email already exists" });
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ error: "Invalid action or missing parameters" });
     }
 
-    try {
-      // Verify the token using Firebase Admin SDK
-      await adminAuth.verifyIdToken(token);
-    } catch (error) {
-      // If token verification fails, return an unauthorized error
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    switch (action) {
-      case "check-username":
-        if (username) {
-          const userByUsername = await User.findOne({ username });
-          console.log("User by username:", userByUsername);
-          res.json({ exists: Boolean(userByUsername) });
-        } else {
-          res.status(400).json({ error: "Username parameter is required" });
-        }
-        break;
-
-      case "check-email":
-        if (email) {
-          try {
-            const userByEmail = await User.findOne({ email });
-            console.log("User by email:", userByEmail);
-            res.json({ exists: Boolean(userByEmail) });
-          } catch (error) {
-            res
-              .status(500)
-              .json({ error: "Database query failed: " + error.message });
-          }
-        } else {
-          res.status(400).json({ error: "Email parameter is required" });
-        }
-        break;
-      case "get-userInfo":
-        if (email) {
-          try {
-            const user = await User.findOne({ email }, "_id username"); // Retrieve only _id and username
-            if (user) {
-              res.json({ _id: user._id, username: user.username });
-            } else {
-              res.status(404).json({ error: "User not found" });
-            }
-          } catch (error) {
-            res
-              .status(500)
-              .json({ error: "Database query failed: " + error.message });
-          }
-        } else {
-          res.status(400).json({ error: "Email parameter is required" });
-        }
-        break;
-      default:
-        res.status(400).json({ error: "Invalid request" });
-        break;
-    }
+    // Return success response if username/email is available
+    return res.status(200).json({ message: "Available" });
   } else {
-    res.status(405).json({ error: "Method not allowed" }); // Handle methods other than GET
+    return res.status(405).json({ error: "Method not allowed" }); // Handle methods other than GET
   }
 }

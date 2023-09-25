@@ -105,11 +105,16 @@ export default function BuyersNew() {
   const handleUsernameBlur = async (e) => {
     formik.handleBlur(e);
     if (formik.values.username) {
-      const response = await axios.get(
-        `/api/users?action=check-username&username=${formik.values.username}`
-      );
-      if (response.data.exists) {
-        formik.setFieldError("username", "Username already exists");
+      try {
+        await axios.get(
+          `/api/users?action=check-username&username=${formik.values.username}`
+        );
+      } catch (error) {
+        if (error.response && error.response.status === 409) {
+          formik.setFieldError("username", "Username already exists");
+        } else {
+          console.error("Error checking username:", error);
+        }
       }
     }
   };
@@ -117,11 +122,16 @@ export default function BuyersNew() {
   const handleEmailBlur = async (e) => {
     formik.handleBlur(e);
     if (formik.values.email) {
-      const response = await axios.get(
-        `/api/users?action=check-email&email=${formik.values.email}`
-      );
-      if (response.data.exists) {
-        formik.setFieldError("email", "Email already exists");
+      try {
+        await axios.get(
+          `/api/users?action=check-email&email=${formik.values.email}`
+        );
+      } catch (error) {
+        if (error.response && error.response.status === 409) {
+          formik.setFieldError("email", "Email already exists");
+        } else {
+          console.error("Error checking email:", error);
+        }
       }
     }
   };

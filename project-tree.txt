@@ -1,6 +1,7 @@
 Folder PATH listing for volume Data
 Volume serial number is B2E5-07B8
-D:.             
+D:.
+
 +---components
 |   +---global
 |   |       NavBar.js
@@ -14,7 +15,10 @@ D:.
 |       AuthContext.js
 |       
 +---models
+|       offer.js
+|       request.js
 |       user.js
+|       vehicle.js
 +---oemData
 +---pages
 |   |   index.js
@@ -44,11 +48,46 @@ D:.
 |   |           index.js
 |   |           [id].js
 |   |           
-|   \---buyers
-|           dashboard.js
-|           login.js
-|           new.js
-|           
+|   +---buyers
+|   |   |   dashboard.js
+|   |   |   login.js
+|   |   |   new.js
+|   |   |   
+|   |   \---[id]
+|   |           edit.js
+|   |           
+|   +---dealers
+|   |   |   dashboard.js
+|   |   |   login.js
+|   |   |   new.js
+|   |   |   
+|   |   \---[id]
+|   |           edit.js
+|   |           
+|   +---offers
+|   |   |   index.js
+|   |   |   new.js
+|   |   |   [id].js
+|   |   |   
+|   |   \---[id]
+|   |           edit.js
+|   |           
+|   +---requests
+|   |   |   index.js
+|   |   |   new.js
+|   |   |   [id].js
+|   |   |   
+|   |   \---[id]
+|   |           edit.js
+|   |           
+|   \---vehicles
+|       |   index.js
+|       |   new.js
+|       |   [id].js
+|       |   
+|       \---[id]
+|               edit.js
+|               
 +---public
 |       favicon.ico
 |       next.svg
@@ -80,4 +119,8 @@ D:.
 |   project-tree.txt
 |   README.md
 |   serviceKey.js
+|   
+
+
+
         

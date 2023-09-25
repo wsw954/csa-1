@@ -62,7 +62,6 @@ export default function Dashboard() {
           <h1 className={styles.title}>Bizzle</h1>
           <p className={styles.description}>Buyer dashboard</p>
           <p className={styles.description}>Email: {currentUser.email}</p>
-          <p className={styles.description}>UID: {currentUser.uid}</p>
           {userInfo && (
             <p className={styles.description}>Username: {userInfo.username}</p>
           )}
