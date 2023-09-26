@@ -63,7 +63,9 @@ export default function Dashboard() {
           <p className={styles.description}>Buyer dashboard</p>
           <p className={styles.description}>Email: {currentUser.email}</p>
           {userInfo && (
-            <p className={styles.description}>Username: {userInfo.username}</p>
+            <p className={styles.description}>
+              First Name: {userInfo.firstName}
+            </p>
           )}
           {error && <p className={styles.error}>Error: {error}</p>}
           <p className={styles.description}></p>
