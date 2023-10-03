@@ -13,33 +13,6 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (currentUser) {
-        try {
-          // Get the ID token of the current user
-          const token = await currentUser.getIdToken();
-
-          // Include the token in the Authorization header
-          const response = await axios.get(
-            `/api/users?action=get-userInfo&email=${currentUser.email}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          setUserInfo(response.data);
-        } catch (err) {
-          setError(err.response?.data?.error || "An error occurred");
-        }
-      }
-    };
-
-    fetchUserInfo();
-  }, [currentUser]);
-
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -62,11 +35,11 @@ export default function Dashboard() {
           <h1 className={styles.title}>Bizzle</h1>
           <p className={styles.description}>Buyer dashboard</p>
           <p className={styles.description}>Email: {currentUser.email}</p>
-          {userInfo && (
-            <p className={styles.description}>
-              First Name: {userInfo.firstName}
-            </p>
-          )}
+          <p className={styles.description}>
+            Firebase Email: {currentUser.email}
+            <br></br>
+            Firebase UID: {currentUser.uid}
+          </p>
           {error && <p className={styles.error}>Error: {error}</p>}
           <p className={styles.description}></p>
           <br></br>

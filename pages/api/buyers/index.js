@@ -16,12 +16,12 @@ export default async function handler(req, res) {
 
     case "POST":
       const buyerData = req.body;
+      console.log(buyerData);
       // Remove the password from the buyerData object
       delete buyerData.password;
       try {
         const newBuyer = new Buyer(buyerData);
         await newBuyer.save();
-        console.log(newBuyer);
         res.status(201).json(newBuyer);
       } catch (error) {
         console.error("Error Line 26:", error);

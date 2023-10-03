@@ -26,8 +26,6 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         const firebaseUser = await signIn(values.email, values.password);
-        // Redirect to dashboard
-        console.log(firebaseUser);
         router.push("/buyers/dashboard");
 
         setLoginError(null);
