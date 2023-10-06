@@ -103,30 +103,6 @@ export default function BuyersNew() {
         }
       }
     },
-
-    // onSubmit: async (values) => {
-    //   try {
-    //     // Save user to MongoDB
-    //     const response = await axios.post("/api/buyers", values);
-    //     if (response.status !== 201) {
-    //       throw new Error(`MongoDB: ${response.data.error}`);
-    //     }
-    //     console.log("Buyer created successfully:", response.data);
-
-    //     // Save user to Firebase
-    //     const firebaseUser = await signUp(values.email, values.password);
-    //     console.log("User created in Firebase:", firebaseUser);
-
-    //     // Redirect to dashboard
-    //     router.push("/buyers/dashboard");
-    //   } catch (error) {
-    //     if (error.message.includes("MongoDB")) {
-    //       console.error("Error creating buyer in MongoDB:", error.message);
-    //     } else {
-    //       console.error("Error creating user in Firebase:", error.message);
-    //     }
-    //   }
-    // },
   });
 
   const handleUsernameBlur = async (e) => {

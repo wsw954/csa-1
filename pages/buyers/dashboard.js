@@ -1,17 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import NavBar from "/components/global/NavBar";
 import Link from "next/link";
 import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
 import { useAuth } from "/contexts/AuthContext";
+import { useUserData } from "/contexts/UserDataContext";
 import { signOut } from "/utils/auth";
-import axios from "axios";
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
-  const [userInfo, setUserInfo] = useState(null);
+  const { mongoDBUser, fetchUserData } = useUserData();
   const [error, setError] = useState(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (currentUser) {
+      // Get the token from Firebase
+      currentUser
+        .getIdToken(true)
+        .then((token) => {
+          fetchUserData(currentUser.uid, token);
+        })
+        .catch((error) => {
+          console.error("Error getting token:", error);
+        });
+    }
+  }, [currentUser]);
 
   const handleSignOut = async () => {
     try {
@@ -26,6 +40,7 @@ export default function Dashboard() {
     // Redirect to login page or show a message
     return <div>Please login to access this page.</div>;
   } else {
+    console.log(mongoDBUser);
     return (
       <div>
         <div>
@@ -34,8 +49,14 @@ export default function Dashboard() {
         <main className={styles.main}>
           <h1 className={styles.title}>Bizzle</h1>
           <p className={styles.description}>Buyer dashboard</p>
-          <p className={styles.description}>Email: {currentUser.email}</p>
           <p className={styles.description}>
+            <br></br>
+            {mongoDBUser.firstName && (
+              <p className={styles.description}>
+                First Name:{mongoDBUser.firstName}
+              </p>
+            )}
+            <br></br>
             Firebase Email: {currentUser.email}
             <br></br>
             Firebase UID: {currentUser.uid}
